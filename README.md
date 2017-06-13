@@ -1,0 +1,1 @@
+This repository is mainly for managing android development projects
