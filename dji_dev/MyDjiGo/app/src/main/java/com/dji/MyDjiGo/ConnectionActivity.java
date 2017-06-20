@@ -1,7 +1,6 @@
 package com.dji.MyDjiGo;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +8,8 @@ import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -18,7 +19,10 @@ import dji.sdk.base.BaseProduct;
 import dji.sdk.products.Aircraft;
 import dji.sdk.sdkmanager.DJISDKManager;
 
-public class ConnectionActivity extends Activity implements View.OnClickListener {
+/**
+ * ConnectionActivity is mainly used to check dji sdk service and product isConnected for other functional activities.
+ */
+public class ConnectionActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = ConnectionActivity.class.getName();
 
@@ -98,6 +102,16 @@ public class ConnectionActivity extends Activity implements View.OnClickListener
         //Get sdk version
         mTextSDKVersion.setText("DJI SDK Version:"+DJISDKManager.getInstance().getSDKVersion());
 
+        setupActionBar();
+
+    }
+
+    private void setupActionBar() {
+        ActionBar actionBar =getSupportActionBar();
+        if (null != actionBar) {
+            actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+            actionBar.setCustomView(R.layout.actionbar_custom);
+        }
     }
 
     protected BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -126,7 +140,8 @@ public class ConnectionActivity extends Activity implements View.OnClickListener
 
         } else {
             Log.v(TAG, "refreshSDK: False");
-            mBtnOpen.setEnabled(false);
+            //mBtnOpen.setEnabled(false);
+            mBtnOpen.setEnabled(true);
 
             mTextProduct.setText(R.string.product_information);
             mTextConnectionStatus.setText(R.string.connection_loose);

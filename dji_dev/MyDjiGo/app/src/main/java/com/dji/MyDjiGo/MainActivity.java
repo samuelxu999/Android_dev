@@ -2,7 +2,6 @@ package com.dji.MyDjiGo;
 
 //Import system lib
 import android.app.Activity;
-
 import android.graphics.SurfaceTexture;
 import android.os.Handler;
 import android.os.Bundle;
@@ -28,7 +27,8 @@ import dji.sdk.codec.DJICodecManager;
 
 
 //import internal lib
-
+import com.dji.MyDjiGo.core.FPVDemo;
+import com.dji.MyDjiGo.utils.ToastUtils;
 
 public class MainActivity extends Activity implements TextureView.SurfaceTextureListener,View.OnClickListener {
 
@@ -43,7 +43,7 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
     private ToggleButton mRecordBtn;
     private TextView recordingTime;
 
-    private Handler handler;
+    private Handler mHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +51,7 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        handler = new Handler();
+        mHandler = new Handler();
 
         initUI();
 
@@ -66,7 +66,7 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
             }
         };
 
-        Camera camera = MyDjiGo.getCameraInstance();
+        Camera camera = FPVDemo.getCameraInstance();
 
         if (camera != null) {
 
@@ -187,7 +187,8 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
         BaseProduct product = MyDjiGo.getProductInstance();
 
         if (product == null || !product.isConnected()) {
-            showToast(getString(R.string.disconnected));
+            //showToast(getString(R.string.disconnected));
+            ToastUtils.setResultToToast(MainActivity.this,getString(R.string.disconnected));
         } else {
             if (null != mVideoSurface) {
                 mVideoSurface.setSurfaceTextureListener(this);
@@ -202,7 +203,7 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
     }
 
     private void uninitPreviewer() {
-        Camera camera = MyDjiGo.getCameraInstance();
+        Camera camera = FPVDemo.getCameraInstance();
         if (camera != null){
             // Reset the callback
             VideoFeeder.getInstance().getVideoFeeds().get(0).setCallback(null);
@@ -237,13 +238,13 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
     public void onSurfaceTextureUpdated(SurfaceTexture surface) {
     }
 
-    public void showToast(final String msg) {
+    /*public void showToast(final String msg) {
         runOnUiThread(new Runnable() {
             public void run() {
                 Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
             }
         });
-    }
+    }*/
 
     @Override
     public void onClick(View v) {
@@ -268,16 +269,18 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
 
     private void switchCameraMode(SettingsDefinitions.CameraMode cameraMode){
 
-        Camera camera = MyDjiGo.getCameraInstance();
+        Camera camera = FPVDemo.getCameraInstance();
         if (camera != null) {
             camera.setMode(cameraMode, new CommonCallbacks.CompletionCallback() {
                 @Override
                 public void onResult(DJIError error) {
 
                     if (error == null) {
-                        showToast("Switch Camera Mode Succeeded");
+                        //showToast("Switch Camera Mode Succeeded");
+                        ToastUtils.setResultToToast(MainActivity.this,"Switch Camera Mode Succeeded");
                     } else {
-                        showToast(error.getDescription());
+                        //showToast(error.getDescription());
+                        ToastUtils.setResultToToast(MainActivity.this,error.getDescription());
                     }
                 }
             });
@@ -287,7 +290,7 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
     // Method for taking photo
     private void captureAction(){
 
-        final Camera camera = MyDjiGo.getCameraInstance();
+        final Camera camera = FPVDemo.getCameraInstance();
         if (camera != null) {
 
             SettingsDefinitions.ShootPhotoMode photoMode = SettingsDefinitions.ShootPhotoMode.SINGLE; // Set the camera capture mode as Single mode
@@ -295,16 +298,18 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
                 @Override
                 public void onResult(DJIError djiError) {
                     if (null == djiError) {
-                        handler.postDelayed(new Runnable() {
+                        mHandler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
                                 camera.startShootPhoto(new CommonCallbacks.CompletionCallback() {
                                     @Override
                                     public void onResult(DJIError djiError) {
                                         if (djiError == null) {
-                                            showToast("take photo: success");
+                                            //showToast("take photo: success");
+                                            ToastUtils.setResultToToast(MainActivity.this,"take photo: success");
                                         } else {
-                                            showToast(djiError.getDescription());
+                                            //showToast(djiError.getDescription());
+                                            ToastUtils.setResultToToast(MainActivity.this,djiError.getDescription());
                                         }
                                     }
                                 });
@@ -319,16 +324,18 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
     // Method for starting recording
     private void startRecord(){
 
-        final Camera camera = MyDjiGo.getCameraInstance();
+        final Camera camera = FPVDemo.getCameraInstance();
         if (camera != null) {
             camera.startRecordVideo(new CommonCallbacks.CompletionCallback(){
                 @Override
                 public void onResult(DJIError djiError)
                 {
                     if (djiError == null) {
-                        showToast("Record video: success");
+                        //showToast("Record video: success");
+                        ToastUtils.setResultToToast(MainActivity.this,"Record video: success");
                     }else {
-                        showToast(djiError.getDescription());
+                        //showToast(djiError.getDescription());
+                        ToastUtils.setResultToToast(MainActivity.this,djiError.getDescription());
                     }
                 }
             }); // Execute the startRecordVideo API
@@ -338,7 +345,7 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
     // Method for stopping recording
     private void stopRecord(){
 
-        Camera camera = MyDjiGo.getCameraInstance();
+        Camera camera = FPVDemo.getCameraInstance();
         if (camera != null) {
             camera.stopRecordVideo(new CommonCallbacks.CompletionCallback(){
 
@@ -346,9 +353,11 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
                 public void onResult(DJIError djiError)
                 {
                     if(djiError == null) {
-                        showToast("Stop recording: success");
+                        //showToast("Stop recording: success");
+                        ToastUtils.setResultToToast(MainActivity.this,"Stop recording: success");
                     }else {
-                        showToast(djiError.getDescription());
+                        //showToast(djiError.getDescription());
+                        ToastUtils.setResultToToast(MainActivity.this,djiError.getDescription());
                     }
                 }
             }); // Execute the stopRecordVideo API

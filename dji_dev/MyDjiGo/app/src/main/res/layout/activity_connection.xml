@@ -14,16 +14,15 @@
         android:textColor="@android:color/black"
         android:textSize="20dp"
         android:textStyle="bold"
-        android:layout_alignBottom="@+id/tv_product_info"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="89dp" />
+        android:layout_marginTop="100dp" />
 
     <TextView
         android:id="@+id/tv_product_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="270dp"
+        android:layout_marginTop="180dp"
         android:text="@string/product_information"
         android:textColor="@android:color/black"
         android:textSize="20dp"
@@ -36,7 +35,7 @@
         android:layout_width="150dp"
         android:layout_height="55dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="350dp"
+        android:layout_marginTop="230dp"
         android:background="@drawable/round_btn"
         android:text="Open"
         android:textColor="@color/colorWhite"
@@ -48,21 +47,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="430dp"
+        android:layout_marginTop="320dp"
         android:text="@string/sdk_version"
         android:textSize="15dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="DJIFPVDemo"
-        android:id="@+id/textView"
-        android:layout_marginTop="58dp"
-        android:textStyle="bold"
-        android:textSize="20dp"
-        android:textColor="@color/colorBlack"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
